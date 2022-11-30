@@ -13,7 +13,7 @@ type song struct {
 
 // omitempty = empty values not allowed
 
-type user struct {
+type User struct {
 	ID       primtive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	MarsID   int               `json:"mars_id"`
 	Username string            `json:"username"`
