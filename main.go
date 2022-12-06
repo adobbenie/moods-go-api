@@ -1,5 +1,13 @@
 package main
 
+import (
+	"fmt"
+	"log"
+	"net/http"
+
+	r "main.go/router"
+)
+
 func main() {
 
 	// if err := godotenv.Load(); err != nil {
@@ -34,5 +42,13 @@ func main() {
 	// 	panic(err)
 	// }
 	// fmt.Printf("%s\n", jsonData)
+	var PORT = ":1234"
+	router := r.Router()
 
+	fmt.Println("Starting up server")
+	err := http.ListenAndServe(PORT, router)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("server listening on port", PORT)
 }
