@@ -1,8 +1,6 @@
 package model
 
-import (
-	"go.mongodb.org/mongo-driver/bson/primtive"
-)
+import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type song struct {
 	SpotifyID string `json:"spotify_id"`
@@ -14,8 +12,8 @@ type song struct {
 // omitempty = empty values not allowed
 
 type User struct {
-	ID       primtive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	MarsID   int               `json:"mars_id"`
-	Username string            `json:"username"`
-	Moodlist []song            `json:"mood_list"`
+	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	MarsID   int                `json:"mars_id"`
+	Username string             `json:"username"`
+	Moodlist []song             `json:"mood_list"`
 }

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"
@@ -41,5 +42,6 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	if err = cursor.All(context.Background(), &users); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(users)
+	w.Header().Set("Content-Type", "application/vnd.api+json")
+	json.NewEncoder(w).Encode(users)
 }
