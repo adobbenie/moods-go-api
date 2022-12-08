@@ -16,7 +16,7 @@ func Router() *mux.Router {
 
 	//PRIVATE ROOM ROUTES
 	router.HandleFunc("/api/rooms/public", c.CreateNewPublicRoom).Methods("POST")
-	//router.HandleFunc("/api/rooms/public/{id}", c.DeletePublicRoom).Methods("DELETE")
+	router.HandleFunc("/api/rooms/public", c.DeletePublicRoom).Methods("DELETE")
 
 	return router
 }

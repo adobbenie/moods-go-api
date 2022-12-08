@@ -5,11 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"main.go/model"
 	"net/http"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"main.go/model"
 )
 
-func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request)  {
+func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request) {
 	var newPubRoom model.PublicRoom
 
 	w.Header().Set("Content-Type", "application/vnd.api+json")
@@ -20,6 +23,18 @@ func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request)  {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Inserted user with id", succes.InsertedID)
+	fmt.Println("Inserted public room with id", succes.InsertedID)
 }
 
+func DeletePublicRoom(w http.ResponseWriter, r *http.Request) {
+	RoomId := r.URL.Query().Get("id")
+	id, _ := primitive.ObjectIDFromHex(RoomId)
+	filter := bson.M{"_id": id}
+	deleteCount, err := PubRoomCollection.DeleteOne(context.Background(), filter)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Public room deleted with count: ", deleteCount)
+
+}
