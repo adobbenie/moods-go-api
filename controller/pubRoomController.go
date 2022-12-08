@@ -12,6 +12,25 @@ import (
 	"main.go/model"
 )
 
+func GetPublicRoomById(w http.ResponseWriter, r *http.Request) {
+	RoomId := r.URL.Query().Get("id")
+	id, _ := primitive.ObjectIDFromHex(RoomId)
+	filter := bson.M{"_id": id}
+
+	cursor, err := PubRoomCollection.Find(context.Background(), filter)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var foundRoom []bson.M
+	if err = cursor.All(context.Background(), &foundRoom); err != nil {
+		log.Fatal(err)
+	}
+
+	w.Header().Set("Content-Type", "application/vnd.api+json")
+	json.NewEncoder(w).Encode(foundRoom)
+}
+
 func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request) {
 	var newPubRoom model.PublicRoom
 
@@ -30,6 +49,7 @@ func DeletePublicRoom(w http.ResponseWriter, r *http.Request) {
 	RoomId := r.URL.Query().Get("id")
 	id, _ := primitive.ObjectIDFromHex(RoomId)
 	filter := bson.M{"_id": id}
+
 	deleteCount, err := PubRoomCollection.DeleteOne(context.Background(), filter)
 
 	if err != nil {
