@@ -3,13 +3,15 @@ package controller
 import (
 	"context"
 	"encoding/json"
-	"go.mongodb.org/mongo-driver/bson"
 	"log"
 	"net/http"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"main.go/db"
 )
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	cursor, err := UserCollection.Find(context.Background(), bson.M{})
+	cursor, err := db.UserCollection.Find(context.Background(), bson.M{})
 	if err != nil {
 		log.Fatal(err)
 	}

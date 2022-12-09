@@ -9,6 +9,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"main.go/db"
 	"main.go/model"
 )
 
@@ -17,7 +18,7 @@ func GetPublicRoomById(w http.ResponseWriter, r *http.Request) {
 	id, _ := primitive.ObjectIDFromHex(RoomId)
 	filter := bson.M{"_id": id}
 
-	cursor, err := PubRoomCollection.Find(context.Background(), filter)
+	cursor, err := db.PubRoomCollection.Find(context.Background(), filter)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,7 +38,7 @@ func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	json.NewDecoder(r.Body).Decode(&newPubRoom)
 
-	succes, err := PubRoomCollection.InsertOne(context.Background(), newPubRoom)
+	succes, err := db.PubRoomCollection.InsertOne(context.Background(), newPubRoom)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,7 +52,7 @@ func UpdatePublicRoom(w http.ResponseWriter, r *http.Request) {
 	var updatedPubRoom model.PublicRoom
 	json.NewDecoder(r.Body).Decode(&updatedPubRoom)
 
-	result, err := PubRoomCollection.ReplaceOne(
+	result, err := db.PubRoomCollection.ReplaceOne(
 		context.Background(),
 		bson.M{"_id": id},
 		updatedPubRoom,
@@ -67,7 +68,7 @@ func DeletePublicRoom(w http.ResponseWriter, r *http.Request) {
 	id, _ := primitive.ObjectIDFromHex(RoomId)
 	filter := bson.M{"_id": id}
 
-	deleteCount, err := PubRoomCollection.DeleteOne(context.Background(), filter)
+	deleteCount, err := db.PubRoomCollection.DeleteOne(context.Background(), filter)
 
 	if err != nil {
 		log.Fatal(err)
