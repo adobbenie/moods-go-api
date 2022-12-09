@@ -45,6 +45,23 @@ func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Inserted public room with id", succes.InsertedID)
 }
 
+func UpdatePublicRoom(w http.ResponseWriter, r *http.Request) {
+	RoomId := r.URL.Query().Get("id")
+	id, _ := primitive.ObjectIDFromHex(RoomId)
+	var updatedPubRoom model.PublicRoom
+	json.NewDecoder(r.Body).Decode(&updatedPubRoom)
+
+	result, err := PubRoomCollection.ReplaceOne(
+		context.Background(),
+		bson.M{"_id": id},
+		updatedPubRoom,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Succesfully updated a public room with count: ", result.ModifiedCount)
+}
+
 func DeletePublicRoom(w http.ResponseWriter, r *http.Request) {
 	RoomId := r.URL.Query().Get("id")
 	id, _ := primitive.ObjectIDFromHex(RoomId)
