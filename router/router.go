@@ -10,6 +10,11 @@ func Router() *mux.Router {
 
 	//USER ROUTES
 	router.HandleFunc("/api/users", c.GetAllUsers).Methods("GET")
+	router.HandleFunc("/api/user", c.GetUserById).Methods("GET")     //marsId as query string parameters
+	router.HandleFunc("/api/user/data", c.UpdateUser).Methods("PUT") //complete user object in body (changeable field: username, spotify_user_id)
+
+	//LIST ROUTES
+	router.HandleFunc("/api/user/list", c.UpdateMoodList).Methods("PUT") //only moodlist in body => array of songs
 
 	//PUBLIC ROOM ROUTES
 
