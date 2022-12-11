@@ -15,7 +15,6 @@ import (
 func UpdateMoodList(w http.ResponseWriter, r *http.Request) {
 	givenId := r.URL.Query().Get("mars_id")
 	filter := bson.M{"mars_id": givenId}
-
 	var updatedList []model.Song
 	json.NewDecoder(r.Body).Decode(&updatedList)
 
