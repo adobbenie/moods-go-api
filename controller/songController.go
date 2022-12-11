@@ -1,15 +1,34 @@
 package controller
 
-import "net/http"
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
 
-func GetMoodListByUserId(w http.ResponseWriter, r *http.Request) {
-	//TODO
-}
+	"go.mongodb.org/mongo-driver/bson"
+	"main.go/db"
+	"main.go/model"
+)
 
-func AddMoodSong(w http.ResponseWriter, r *http.Request) {
-	//TODO
-}
+func UpdateMoodList(w http.ResponseWriter, r *http.Request) {
+	givenId := r.URL.Query().Get("mars_id")
+	filter := bson.M{"mars_id": givenId}
 
-func DeleteMoodSong(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	var updatedList []model.Song
+	json.NewDecoder(r.Body).Decode(&updatedList)
+
+	result, err := db.UserCollection.UpdateOne(
+		context.Background(),
+		filter,
+		bson.D{
+			{"$set", bson.D{{"mood_list", updatedList}}},
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Succesfully update a moodlist by adding a song with count:", result.ModifiedCount)
 }
