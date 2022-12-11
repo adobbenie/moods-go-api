@@ -58,7 +58,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		bson.D{
 			{"$set", bson.D{
 				{"username", updatedUser.Username},
-				{"spotify_user_id", updatedUser.SpotifyID},
+				{"spotify_user_id", updatedUser.Spotify_User_Id},
 			},
 			},
 		},

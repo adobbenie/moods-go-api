@@ -30,5 +30,5 @@ func UpdateMoodList(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Succesfully update a moodlist by adding a song with count:", result.ModifiedCount)
+	fmt.Println("Succesfully updated a moodlist with count:", result.ModifiedCount)
 }
