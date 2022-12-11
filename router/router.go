@@ -11,6 +11,7 @@ func Router() *mux.Router {
 	//USER ROUTES
 	router.HandleFunc("/api/users", c.GetAllUsers).Methods("GET")
 	router.HandleFunc("/api/user", c.GetUserById).Methods("GET")
+	router.HandleFunc("/api/user", c.UpdateUser).Methods("PUT")
 
 	//PUBLIC ROOM ROUTES
 

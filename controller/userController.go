@@ -3,12 +3,14 @@ package controller
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"main.go/db"
+	"main.go/model"
 )
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
@@ -43,6 +45,37 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(foundUser)
 }
 
-func updateUser(w http.ResponseWriter, r *http.Request) {
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	givenId := r.URL.Query().Get("id")
+	id, _ := primitive.ObjectIDFromHex(givenId)
+	filter := bson.M{"_id": id}
+
+	var updatedUser model.User
+	json.NewDecoder(r.Body).Decode(&updatedUser)
+
+	result, err := db.UserCollection.UpdateOne(
+		context.Background(),
+		filter,
+		bson.D{
+			{"$set", bson.D{
+				{"username", updatedUser.Username},
+				{"spotify_user_id", updatedUser.SpotifyID},
+			},
+			},
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Succesfully updated a user with count: ", result.ModifiedCount)
 
 }
+
+/*
+func getIdFilter(request *http.Request) {
+	givenId := request.URL.Query().Get("id")
+	id, _ := primitive.ObjectIDFromHex(givenId)
+	filter := bson.M{"_id": id}
+	return filter
+}
+*/
