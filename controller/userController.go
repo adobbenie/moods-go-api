@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"main.go/db"
 	"main.go/model"
 )
@@ -27,9 +26,9 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUserById(w http.ResponseWriter, r *http.Request) {
-	userId := r.URL.Query().Get("id")
-	id, _ := primitive.ObjectIDFromHex(userId)
-	filter := bson.M{"_id": id}
+	givenId := r.URL.Query().Get("mars_id")
+	//id, _ := primitive.ObjectIDFromHex(userId)
+	filter := bson.M{"mars_id": givenId}
 
 	cursor, err := db.UserCollection.Find(context.Background(), filter)
 	if err != nil {
@@ -46,9 +45,9 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	givenId := r.URL.Query().Get("id")
-	id, _ := primitive.ObjectIDFromHex(givenId)
-	filter := bson.M{"_id": id}
+	givenId := r.URL.Query().Get("mars_id")
+	//id, _ := primitive.ObjectIDFromHex(givenId)
+	filter := bson.M{"mars_id": givenId}
 
 	var updatedUser model.User
 	json.NewDecoder(r.Body).Decode(&updatedUser)
@@ -68,14 +67,4 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	fmt.Println("Succesfully updated a user with count: ", result.ModifiedCount)
-
 }
-
-/*
-func getIdFilter(request *http.Request) {
-	givenId := request.URL.Query().Get("id")
-	id, _ := primitive.ObjectIDFromHex(givenId)
-	filter := bson.M{"_id": id}
-	return filter
-}
-*/
