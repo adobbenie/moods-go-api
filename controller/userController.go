@@ -27,7 +27,6 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 
 func GetUserById(w http.ResponseWriter, r *http.Request) {
 	givenId := r.URL.Query().Get("mars_id")
-	//id, _ := primitive.ObjectIDFromHex(userId)
 	filter := bson.M{"mars_id": givenId}
 
 	cursor, err := db.UserCollection.Find(context.Background(), filter)
@@ -46,7 +45,6 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	givenId := r.URL.Query().Get("mars_id")
-	//id, _ := primitive.ObjectIDFromHex(givenId)
 	filter := bson.M{"mars_id": givenId}
 
 	var updatedUser model.User

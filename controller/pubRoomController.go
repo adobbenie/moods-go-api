@@ -74,5 +74,4 @@ func DeletePublicRoom(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	fmt.Println("Public room deleted with count: ", deleteCount)
-
 }
