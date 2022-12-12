@@ -63,7 +63,20 @@ func CreateNewPrivateRoom(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdatePrivateRoom(w http.ResponseWriter, r *http.Request) {
+	givenId := mux.Vars(r)["id"]
+	ObjId, _ := primitive.ObjectIDFromHex(givenId)
+	var updatedPrivRoom model.PrivateRoom
+	json.NewDecoder(r.Body).Decode(&updatedPrivRoom)
 
+	result, err := db.PriRoomCollection.ReplaceOne(
+		ctx,
+		bson.M{"_id": ObjId},
+		updatedPrivRoom,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Succesfully updated a private room with count: ", result.ModifiedCount)
 }
 
 func DeletePrivateRoom(w http.ResponseWriter, r *http.Request) {

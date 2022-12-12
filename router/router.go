@@ -20,7 +20,7 @@ func Router() *mux.Router {
 	router.HandleFunc("/api/rooms/private", c.GetAllPrivateRooms).Methods("GET")
 	router.HandleFunc("/api/rooms/private/{id}", c.GetPrivateRoomById).Methods("GET")
 	router.HandleFunc("/api/rooms/private", c.CreateNewPrivateRoom).Methods("POST")
-	router.HandleFunc("/api/rooms/private", c.UpdatePrivateRoom).Methods("PUT")
+	router.HandleFunc("/api/rooms/private/{id}", c.UpdatePrivateRoom).Methods("PUT")
 	router.HandleFunc("/api/rooms/private/{id}", c.DeletePrivateRoom).Methods("DELETE")
 
 	//PUBLIC ROOM ROUTES
