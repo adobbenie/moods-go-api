@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -18,13 +17,13 @@ func GetPublicRoomById(w http.ResponseWriter, r *http.Request) {
 	id, _ := primitive.ObjectIDFromHex(RoomId)
 	filter := bson.M{"_id": id}
 
-	cursor, err := db.PubRoomCollection.Find(context.Background(), filter)
+	cursor, err := db.PubRoomCollection.Find(Ctx, filter)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var foundRoom []bson.M
-	if err = cursor.All(context.Background(), &foundRoom); err != nil {
+	if err = cursor.All(Ctx, &foundRoom); err != nil {
 		log.Fatal(err)
 	}
 
@@ -38,7 +37,7 @@ func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	json.NewDecoder(r.Body).Decode(&newPubRoom)
 
-	succes, err := db.PubRoomCollection.InsertOne(context.Background(), newPubRoom)
+	succes, err := db.PubRoomCollection.InsertOne(Ctx, newPubRoom)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,7 +52,7 @@ func UpdatePublicRoom(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&updatedPubRoom)
 
 	result, err := db.PubRoomCollection.ReplaceOne(
-		context.Background(),
+		Ctx,
 		bson.M{"_id": id},
 		updatedPubRoom,
 	)
@@ -68,8 +67,7 @@ func DeletePublicRoom(w http.ResponseWriter, r *http.Request) {
 	id, _ := primitive.ObjectIDFromHex(RoomId)
 	filter := bson.M{"_id": id}
 
-	deleteCount, err := db.PubRoomCollection.DeleteOne(context.Background(), filter)
-
+	deleteCount, err := db.PubRoomCollection.DeleteOne(Ctx, filter)
 	if err != nil {
 		log.Fatal(err)
 	}

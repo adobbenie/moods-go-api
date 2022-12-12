@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -19,7 +18,7 @@ func UpdateMoodList(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&updatedList)
 
 	result, err := db.UserCollection.UpdateOne(
-		context.Background(),
+		Ctx,
 		filter,
 		bson.D{
 			{"$set", bson.D{{"mood_list", updatedList}}},

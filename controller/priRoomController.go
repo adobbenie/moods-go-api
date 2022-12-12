@@ -14,15 +14,15 @@ import (
 	"main.go/model"
 )
 
-var ctx = context.Background()
+var Ctx = context.Background()
 
 func GetAllPrivateRooms(w http.ResponseWriter, r *http.Request) {
-	cursor, err := db.PriRoomCollection.Find(ctx, bson.M{})
+	cursor, err := db.PriRoomCollection.Find(Ctx, bson.M{})
 	if err != nil {
 		log.Fatal(err)
 	}
 	var rooms []bson.M
-	if err = cursor.All(ctx, &rooms); err != nil {
+	if err = cursor.All(Ctx, &rooms); err != nil {
 		log.Fatal(err)
 	}
 
@@ -37,13 +37,13 @@ func GetPrivateRoomById(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	cursor, err := db.PriRoomCollection.Find(ctx, bson.M{"_id": ObjId})
+	cursor, err := db.PriRoomCollection.Find(Ctx, bson.M{"_id": ObjId})
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var foundRoom []bson.M
-	if err = cursor.All(ctx, &foundRoom); err != nil {
+	if err = cursor.All(Ctx, &foundRoom); err != nil {
 		log.Fatal(err)
 	}
 
@@ -55,7 +55,7 @@ func CreateNewPrivateRoom(w http.ResponseWriter, r *http.Request) {
 	var newPriRoom model.PrivateRoom
 	json.NewDecoder(r.Body).Decode(&newPriRoom)
 
-	succes, err := db.PriRoomCollection.InsertOne(ctx, newPriRoom)
+	succes, err := db.PriRoomCollection.InsertOne(Ctx, newPriRoom)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -69,7 +69,7 @@ func UpdatePrivateRoom(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&updatedPrivRoom)
 
 	result, err := db.PriRoomCollection.ReplaceOne(
-		ctx,
+		Ctx,
 		bson.M{"_id": ObjId},
 		updatedPrivRoom,
 	)
@@ -80,5 +80,12 @@ func UpdatePrivateRoom(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeletePrivateRoom(w http.ResponseWriter, r *http.Request) {
+	givenId := mux.Vars(r)["id"]
+	ObjId, _ := primitive.ObjectIDFromHex(givenId)
 
+	deleteCount, err := db.PriRoomCollection.DeleteOne(Ctx, bson.M{"_id": ObjId})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Private room deleted with count: ", deleteCount)
 }

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -13,12 +12,12 @@ import (
 )
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	cursor, err := db.UserCollection.Find(context.Background(), bson.M{})
+	cursor, err := db.UserCollection.Find(Ctx, bson.M{})
 	if err != nil {
 		log.Fatal(err)
 	}
 	var users []bson.M
-	if err = cursor.All(context.Background(), &users); err != nil {
+	if err = cursor.All(Ctx, &users); err != nil {
 		log.Fatal(err)
 	}
 	w.Header().Set("Content-Type", "application/vnd.api+json")
@@ -29,13 +28,13 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	givenId := r.URL.Query().Get("mars_id")
 	filter := bson.M{"mars_id": givenId}
 
-	cursor, err := db.UserCollection.Find(context.Background(), filter)
+	cursor, err := db.UserCollection.Find(Ctx, filter)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var foundUser []bson.M
-	if err = cursor.All(context.Background(), &foundUser); err != nil {
+	if err = cursor.All(Ctx, &foundUser); err != nil {
 		log.Fatal(err)
 	}
 
@@ -51,7 +50,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&updatedUser)
 
 	result, err := db.UserCollection.UpdateOne(
-		context.Background(),
+		Ctx,
 		filter,
 		bson.D{
 			{"$set", bson.D{
