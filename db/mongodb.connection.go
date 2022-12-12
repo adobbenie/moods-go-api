@@ -11,8 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// const connectionString_ = "mongodb+srv://user:user@moodsmusicdb.teextgp.mongodb.net/?retryWrites=true&w=majority"
-//const DbName = "moodsdb"
+//const connectionString_ = "mongodb+srv://user:user@moodsmusicdb.teextgp.mongodb.net/?retryWrites=true&w=majority"
 
 var UserCollection *mongo.Collection
 var PubRoomCollection *mongo.Collection
@@ -24,6 +23,7 @@ func init() {
 		log.Println("No .env file found")
 	}
 	uri := os.Getenv("MONGODB_URI")
+
 	if uri == "" {
 		log.Fatal("Your 'MONGODB_URI' environmental variable must be set by giving your connection string as it's value in the .env file.")
 	}

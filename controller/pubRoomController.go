@@ -43,7 +43,7 @@ func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Inserted public room with id", succes.InsertedID)
+	fmt.Println("Inserted a new public room with id:", succes.InsertedID)
 }
 
 func UpdatePublicRoom(w http.ResponseWriter, r *http.Request) {
