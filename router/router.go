@@ -17,6 +17,11 @@ func Router() *mux.Router {
 	router.HandleFunc("/api/user/list", c.UpdateMoodList).Methods("PUT") //only moodlist in body => array of songs
 
 	//PUBLIC ROOM ROUTES
+	router.HandleFunc("/api/rooms/private", c.GetAllPrivateRooms).Methods("GET")
+	router.HandleFunc("/api/rooms/private/{id}", c.GetPrivateRoomById).Methods("GET")
+	router.HandleFunc("/api/rooms/private", c.CreateNewPrivateRoom).Methods("POST")
+	router.HandleFunc("/api/rooms/private", c.UpdatePrivateRoom).Methods("PUT")
+	router.HandleFunc("/api/rooms/private/{id}", c.DeletePrivateRoom).Methods("DELETE")
 
 	//PRIVATE ROOM ROUTES
 	router.HandleFunc("/api/rooms/public", c.GetPublicRoomById).Methods("GET")    //id added as string query param.
