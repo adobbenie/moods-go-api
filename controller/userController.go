@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"main.go/db"
 	"main.go/model"
@@ -25,7 +26,7 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUserById(w http.ResponseWriter, r *http.Request) {
-	givenId := r.URL.Query().Get("mars_id")
+	givenId := mux.Vars(r)["mars_id"]
 	filter := bson.M{"mars_id": givenId}
 
 	cursor, err := db.UserCollection.Find(Ctx, filter)
@@ -37,13 +38,13 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	if err = cursor.All(Ctx, &foundUser); err != nil {
 		log.Fatal(err)
 	}
-
+	fmt.Println(foundUser)
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	json.NewEncoder(w).Encode(foundUser)
 }
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	givenId := r.URL.Query().Get("mars_id")
+	givenId := mux.Vars(r)["mars_id"]
 	filter := bson.M{"mars_id": givenId}
 
 	var updatedUser model.User

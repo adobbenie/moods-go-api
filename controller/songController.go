@@ -6,14 +6,16 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"main.go/db"
 	"main.go/model"
 )
 
 func UpdateMoodList(w http.ResponseWriter, r *http.Request) {
-	givenId := r.URL.Query().Get("mars_id")
+	givenId := mux.Vars(r)["mars_id"]
 	filter := bson.M{"mars_id": givenId}
+	fmt.Printf(givenId)
 	var updatedList []model.Song
 	json.NewDecoder(r.Body).Decode(&updatedList)
 
