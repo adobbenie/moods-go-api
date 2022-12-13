@@ -13,9 +13,10 @@ func Router() *mux.Router {
 	router.HandleFunc("/api/users/{mars_id}", c.GetUserById).Methods("GET")
 	router.HandleFunc("/api/users/{mars_id}/data", c.UpdateUser).Methods("PUT")
 
-	//MOODLIST ROUTES
+	//SONG ROUTES
 	router.HandleFunc("/api/users/{mars_id}/list", c.UpdateMoodList).Methods("PUT")
-	//TODO get one's moodlist by id
+	router.HandleFunc("/api/rooms/public/{_id}/played", c.GetAllPlayedSongs).Methods("GET")
+	router.HandleFunc("/api/rooms/public/{_id}/played", c.UpdatePlayedSongs).Methods("PUT")
 
 	//PUBLIC ROOM ROUTES
 	router.HandleFunc("/api/rooms/public/{_id}", c.GetPublicRoomById).Methods("GET")
