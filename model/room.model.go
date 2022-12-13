@@ -12,7 +12,8 @@ type PrivateRoom struct {
 
 type PublicRoom struct {
 	_Id         primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Rpi_ID      int                `json:"rpi_id"`
+	Rpi_ID      string             `json:"rpi_id"`
 	Location    string             `json:"location"`
 	Description string             `json:"description"`
+	Played_Song []string           `json:"played_songs"`
 }

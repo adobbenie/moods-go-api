@@ -1,12 +1,12 @@
 package controller
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"main.go/db"
@@ -14,17 +14,17 @@ import (
 )
 
 func GetPublicRoomById(w http.ResponseWriter, r *http.Request) {
-	RoomId := r.URL.Query().Get("id")
-	id, _ := primitive.ObjectIDFromHex(RoomId)
-	filter := bson.M{"_id": id}
+	givenId := mux.Vars(r)["_id"]
+	roomId, _ := primitive.ObjectIDFromHex(givenId)
+	filter := bson.M{"_id": roomId}
 
-	cursor, err := db.PubRoomCollection.Find(context.Background(), filter)
+	cursor, err := db.PubRoomCollection.Find(Ctx, filter)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var foundRoom []bson.M
-	if err = cursor.All(context.Background(), &foundRoom); err != nil {
+	if err = cursor.All(Ctx, &foundRoom); err != nil {
 		log.Fatal(err)
 	}
 
@@ -38,23 +38,25 @@ func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	json.NewDecoder(r.Body).Decode(&newPubRoom)
 
-	succes, err := db.PubRoomCollection.InsertOne(context.Background(), newPubRoom)
+	succes, err := db.PubRoomCollection.InsertOne(Ctx, newPubRoom)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Inserted public room with id", succes.InsertedID)
+	fmt.Println("Inserted a new public room with id:", succes.InsertedID)
 }
 
 func UpdatePublicRoom(w http.ResponseWriter, r *http.Request) {
-	RoomId := r.URL.Query().Get("id")
-	id, _ := primitive.ObjectIDFromHex(RoomId)
+	givenId := mux.Vars(r)["_id"]
+	roomId, _ := primitive.ObjectIDFromHex(givenId)
+	filter := bson.M{"_id": roomId}
+
 	var updatedPubRoom model.PublicRoom
 	json.NewDecoder(r.Body).Decode(&updatedPubRoom)
 
 	result, err := db.PubRoomCollection.ReplaceOne(
-		context.Background(),
-		bson.M{"_id": id},
+		Ctx,
+		filter,
 		updatedPubRoom,
 	)
 	if err != nil {
@@ -64,15 +66,13 @@ func UpdatePublicRoom(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeletePublicRoom(w http.ResponseWriter, r *http.Request) {
-	RoomId := r.URL.Query().Get("id")
-	id, _ := primitive.ObjectIDFromHex(RoomId)
-	filter := bson.M{"_id": id}
+	givenId := mux.Vars(r)["_id"]
+	roomId, _ := primitive.ObjectIDFromHex(givenId)
+	filter := bson.M{"_id": roomId}
 
-	deleteCount, err := db.PubRoomCollection.DeleteOne(context.Background(), filter)
-
+	deleteCount, err := db.PubRoomCollection.DeleteOne(Ctx, filter)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("Public room deleted with count: ", deleteCount)
-
 }
