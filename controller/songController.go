@@ -56,5 +56,26 @@ func GetAllPlayedSongs(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdatePlayedSongs(w http.ResponseWriter, r *http.Request) {
+	givenId := mux.Vars(r)["_id"]
+	roomId, _ := primitive.ObjectIDFromHex(givenId)
+	filter := bson.M{"_id": roomId}
 
+	var updatedPlayedSongsList []string
+	json.NewDecoder(r.Body).Decode(&updatedPlayedSongsList)
+
+	result, err := db.PubRoomCollection.UpdateOne(
+		Ctx,
+		filter,
+		bson.D{
+			{
+				"$set", bson.D{
+					{"played_songs", updatedPlayedSongsList},
+				},
+			},
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Succesfully updated the played_songs list of a public room with count: ", result.ModifiedCount)
 }
