@@ -15,7 +15,7 @@ import (
 func UpdateMoodList(w http.ResponseWriter, r *http.Request) {
 	givenId := mux.Vars(r)["mars_id"]
 	filter := bson.M{"mars_id": givenId}
-	fmt.Printf(givenId)
+
 	var updatedList []model.Song
 	json.NewDecoder(r.Body).Decode(&updatedList)
 

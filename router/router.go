@@ -10,11 +10,12 @@ func Router() *mux.Router {
 
 	//USER ROUTES
 	router.HandleFunc("/api/users", c.GetAllUsers).Methods("GET")
-	router.HandleFunc("/api/users/{mars_id}", c.GetUserById).Methods("GET")     //marsId as query string parameters
-	router.HandleFunc("/api/users/{mars_id}/data", c.UpdateUser).Methods("PUT") //complete user object in body (changeable field: username, spotify_user_id)
+	router.HandleFunc("/api/users/{mars_id}", c.GetUserById).Methods("GET")
+	router.HandleFunc("/api/users/{mars_id}/data", c.UpdateUser).Methods("PUT")
 
 	//MOODLIST ROUTES
-	router.HandleFunc("/api/users/{mars_id}/list", c.UpdateMoodList).Methods("PUT") //only moodlist in body => array of songs
+	router.HandleFunc("/api/users/{mars_id}/list", c.UpdateMoodList).Methods("PUT")
+	//TODO get one's moodlist by id
 
 	//PUBLIC ROOM ROUTES
 	router.HandleFunc("/api/rooms/public", c.GetPublicRoomById).Methods("GET")    //id added as string query param.
