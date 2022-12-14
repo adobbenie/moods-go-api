@@ -1,1 +1,1 @@
-web: moods-go-api
+web: ./main.go
