@@ -1,1 +1,1 @@
-web: start main.go.exe
+web: bin/main.go
