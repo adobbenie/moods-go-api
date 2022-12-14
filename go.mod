@@ -1,4 +1,4 @@
-module github.com/adobbenie/moods-go-api
+module main.go
 
 go 1.19
 
