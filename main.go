@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	r "main.go/router"
 )
 
 func main() {
-	var PORT = ":1234"
+	PORT := os.Getenv("PORT")
 	router := r.Router()
 
 	fmt.Println("Starting up server")
