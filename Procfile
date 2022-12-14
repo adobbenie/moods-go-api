@@ -1,1 +1,1 @@
-web: ./bin/main.go.exe
+web: ./bin/main.go
