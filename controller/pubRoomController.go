@@ -44,6 +44,8 @@ func CreateNewPublicRoom(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Inserted a new public room with id:", succes.InsertedID)
+	w.Header().Set("Content-Type", "application/vnd.api+json")
+	json.NewEncoder(w).Encode(succes.InsertedID)
 }
 
 func UpdatePublicRoom(w http.ResponseWriter, r *http.Request) {

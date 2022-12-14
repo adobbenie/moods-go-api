@@ -60,6 +60,8 @@ func CreateNewPrivateRoom(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	fmt.Println("Insert a new private room with id:", succes.InsertedID)
+	w.Header().Set("Content-Type", "application/vnd.api+json")
+	json.NewEncoder(w).Encode(succes.InsertedID)
 }
 
 func UpdatePrivateRoom(w http.ResponseWriter, r *http.Request) {
