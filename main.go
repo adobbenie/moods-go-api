@@ -14,7 +14,7 @@ func main() {
 	router := r.Router()
 
 	fmt.Println("Starting up server")
-	err := http.ListenAndServe(PORT, router)
+	err := http.ListenAndServe(":"+PORT, router)
 	if err != nil {
 		log.Fatal(err)
 	}
