@@ -67,11 +67,7 @@ func UpdatePlayedSongs(w http.ResponseWriter, r *http.Request) {
 		Ctx,
 		filter,
 		bson.D{
-			{
-				"$set", bson.D{
-					{"played_songs", updatedPlayedSongsList},
-				},
-			},
+			{"$set", bson.D{{"played_songs", updatedPlayedSongsList}}},
 		},
 	)
 	if err != nil {
